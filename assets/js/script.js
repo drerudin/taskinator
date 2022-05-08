@@ -57,9 +57,9 @@ var createTaskEl = function(taskDataObj) {
 
   tasks.push(taskDataObj);
 
-  var saveTasks = function() {
-    localStorage.setItem("tasks", tasks);
-}
+
+    saveTasks();
+
 
   // create task actions (buttons and select) for task
   var taskActionsEl = createTaskActions(taskIdCounter);
@@ -125,9 +125,8 @@ var completeEditTask = function(taskName, taskType, taskId) {
       }
   };
 
-  var saveTasks = function() {
-    localStorage.setItem("tasks", tasks);
-}
+   saveTasks();
+
 
   alert("Task Updated!");
 
@@ -153,7 +152,6 @@ var taskButtonHandler = function(event) {
 };
 
 var taskStatusChangeHandler = function(event) {
-  console.log(event.target.value);
 
   // find task list item based on event.target's data-task-id attribute
   var taskId = event.target.getAttribute("data-task-id");
@@ -178,9 +176,9 @@ var taskStatusChangeHandler = function(event) {
       }
   }
 
-  var saveTasks = function() {
-    localStorage.setItem("tasks", tasks);
-}
+
+ saveTasks();
+
 
 };
 
@@ -227,15 +225,32 @@ var deleteTask = function(taskId) {
   // reassign tasks array to be the same as updatedTaskArr
   tasks = updatedTaskArr;
 
-  var saveTasks = function() {
-    localStorage.setItem("tasks", tasks);
-}
+saveTasks()
+
 
 };
 
 var saveTasks = function() {
     localStorage.setItem("tasks", JSON.stringify(tasks));
 }
+
+var loadTasks = function() {
+    var savedTasks = localStorage.getItem("tasks");
+    
+   
+    if (!savedTasks) {
+        return false;
+    }
+
+    savedTasks = JSON.parse(savedTasks);
+
+    // loop through savedTasks array
+    for (var i = o; i < savedTasks.length; i++) {
+        //pass each task object into the 'createTaskEl()' function
+        createTaskEl(savedTasks[i]);
+    }
+}
+
 
 // Create a new task
 formEl.addEventListener("submit", taskFormHandler);
@@ -245,3 +260,5 @@ pageContentEl.addEventListener("click", taskButtonHandler);
 
 // for changing the status
 pageContentEl.addEventListener("change", taskStatusChangeHandler);
+
+loadTasks();
